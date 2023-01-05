@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import request
-from ProductController import ProductController
+from controllers.ProductController import ProductController
 
 app = Flask(__name__)
 
