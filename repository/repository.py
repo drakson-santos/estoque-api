@@ -1,5 +1,5 @@
 from repository.baseRepository import BaseRepository
-from repository.inMemoryRepository.inMemoryRepository import InMemoryRepository
+from repository.inMemoryRepository.inMemory import InMemoryRepository
 
 
 class Repository(BaseRepository):

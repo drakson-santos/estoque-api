@@ -1,4 +1,4 @@
-from repository.Product import Product
+from models.Product import Product
 from repository.repository import Repository
 import uuid
 
