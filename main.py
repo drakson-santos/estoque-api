@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import request
 from controllers.ProductController import ProductController
+from controllers.CategoryController import CategoryController
 
 app = Flask(__name__)
 
@@ -56,5 +57,36 @@ def delete_product():
     return "deleted"
 
 
+@app.route('/categories', methods=["GET"])
+def get_categories():
+    category_id =  request.args.get("category_id")
+    category = CategoryController().get_category(category_id)
+    return {
+        "Categories": category
+    }
+
+@app.route('/categories', methods=["POST"])
+def save_category():
+    category_name = request.json["category_name"]
+
+    CategoryController().save_category(
+        category_name
+    )
+
+    return {
+        "id": category_name
+    }
+@app.route('/categories', methods=["PUT"])
+def update_category():
+    category_id = request.args.get("category_id")
+    category_name = request.json.get("category_name")
+    CategoryController().update_category(category_id, category_name)
+    return "updated"
+
+@app.route('/categories', methods=["DELETE"])
+def delete_category():
+    category_id = request.args.get("category_id")
+    CategoryController().delete_category(category_id)
+    return "deleted"
 if __name__ == '__main__':
     app.run(debug=True)
