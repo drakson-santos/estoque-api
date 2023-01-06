@@ -1,12 +1,21 @@
+import uuid
 from models.Product import Product
 from repository.repository import Repository
-import uuid
+from exceptions.api.NotFoundException import NotFoundException
 
 class ProductController:
 
     def get_products(self, product_id=None):
         repository = Repository()
-        return repository.get("products", product_id)
+        products = repository.get("products", product_id)
+
+        if not products:
+            custom_message = "Products not found"
+            if product_id:
+                custom_message = f"Product not found for id: {product_id}"
+            raise NotFoundException(custom_message)
+
+        return products
 
     def save_product(self, product_name, model, category, quantity):
         id = str(uuid.uuid4())
@@ -15,10 +24,13 @@ class ProductController:
         repository = Repository()
         repository.save("products", product.__dict__)
 
+        return id
+
     def update_product(self, product_id, product_name=None, model=None, category=None, quantity=None):
         product = self.get_products(product_id)
         if not product:
-            return False
+            custom_message = f"Product not found for id: {product_id}"
+            raise NotFoundException(custom_message)
 
         product = Product(
             product["id"],
@@ -40,9 +52,13 @@ class ProductController:
         repository = Repository()
         repository.update("products", product_id, product.__dict__)
 
+        return product.id
+
     def delete_product(self, product_id):
         product = self.get_products(product_id)
         if not product:
-            return False
+            custom_message = f"Product not found for id: {product_id}"
+            raise NotFoundException(custom_message)
+
         repository = Repository()
         repository.delete("products", product_id)

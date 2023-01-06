@@ -2,13 +2,21 @@ from flask import Flask
 from flask import request
 from controllers.ProductController import ProductController
 from controllers.CategoryController import CategoryController
+from exceptions.api.NotFoundException import NotFoundException
 
 app = Flask(__name__)
 
 @app.route('/products', methods=["GET"])
 def get_products():
     product_id =  request.args.get("product_id")
-    products = ProductController().get_products(product_id)
+
+    try:
+        products = ProductController().get_products(product_id)
+    except NotFoundException as error:
+        return {
+            "message": error.message,
+        }, error.http_code
+
     return {
         "products": products
     }
@@ -21,16 +29,22 @@ def save_product():
     category = request.json["category"]
     quantity = request.json["quantity"]
 
-    ProductController().save_product(
-        product_name,
-        model,
-        category,
-        quantity
-    )
+    try:
+        product_id = ProductController().save_product(
+            product_name,
+            model,
+            category,
+            quantity
+        )
+
+    except Exception as error:
+        return {
+            "message": str(error.message),
+        }, 500
 
     return {
-        "id": product_name
-    }
+        "id": product_id
+    }, 201
 
 
 @app.route('/products', methods=["PUT"])
@@ -41,20 +55,35 @@ def update_product():
     category = request.json.get("category")
     quantity = request.json.get("quantity")
 
-    ProductController().update_product(
-        product_id,
-        product_name,
-        model,
-        category,
-        quantity
-    )
-    return "updated"
+    try:
+        product_id = ProductController().update_product(
+            product_id,
+            product_name,
+            model,
+            category,
+            quantity
+        )
+    except NotFoundException as error:
+        return {
+            "message": error.message,
+        }, error.http_code
+
+    return {
+        "id": product_id
+    }, 200
 
 @app.route('/products', methods=["DELETE"])
 def delete_product():
     product_id =  request.args.get("product_id")
-    ProductController().delete_product(product_id)
-    return "deleted"
+
+    try:
+        ProductController().delete_product(product_id)
+    except NotFoundException as error:
+        return {
+            "message": error.message,
+        }, error.http_code
+
+    return {}, 204
 
 
 @app.route('/categories', methods=["GET"])
