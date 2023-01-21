@@ -1,12 +1,17 @@
 from flask import Flask
 from flask import request
+from flask_cors import CORS
 from controllers.ProductController import ProductController
 from controllers.CategoryController import CategoryController
 from controllers.ModelController import ModelController
 from controllers.ProductMockController import ProductMockController
 from exceptions.api.NotFoundException import NotFoundException
+from werkzeug.utils import secure_filename
+import os
 
 app = Flask(__name__)
+app.config["UPLOAD_FOLDER"] = "static"
+app.config["SERVER_NAME"] = "localhost:5000"
 
 @app.route('/products', methods=["GET"])
 def get_products():
@@ -26,17 +31,31 @@ def get_products():
 
 @app.route('/products', methods=["POST"])
 def save_product():
-    product_name = request.json["product_name"]
-    model = request.json["model"]
-    category = request.json["category"]
-    quantity = request.json["quantity"]
+    # product_name = request.json["product_name"]
+    # model = request.json["model"]
+    # category = request.json["category"]
+    # quantity = request.json["quantity"]
+    product_name = request.form["product_name"]
+    model = request.form["model"]
+    category = request.form["category"]
+    quantity = request.form["quantity"]
+    photo = request.files.get("photo")
+
+    if photo:
+        file = request.files['photo']
+        if file.filename != '':
+            filename = secure_filename(file.filename)
+            photo = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+            file.save(photo)
+            photo_url = "http://"+app.config["SERVER_NAME"]+"/"+app.config["UPLOAD_FOLDER"]+"/"+filename
 
     try:
         product_id = ProductController().save_product(
             product_name,
             model,
             category,
-            quantity
+            quantity,
+            photo_url
         )
 
     except Exception as error:
@@ -99,7 +118,7 @@ def get_categories():
         }, error.http_code
 
     return {
-        "Categories": category
+        "categories": category
     }
 
 @app.route('/categories', methods=["POST"])
@@ -158,7 +177,7 @@ def get_model():
         }, error.http_code
 
     return {
-        "Models": model
+        "models": model
     }
 
 @app.route('/models', methods=["POST"])
@@ -208,4 +227,5 @@ def delete_model():
 
 if __name__ == '__main__':
     ProductMockController().save_mock()
+    CORS(app)
     app.run(debug=True)

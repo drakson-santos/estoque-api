@@ -17,9 +17,9 @@ class ProductController:
 
         return products
 
-    def save_product(self, product_name, model, category, quantity):
+    def save_product(self, product_name, model, category, quantity, photo=None):
         id = str(uuid.uuid4())
-        product = Product(id, product_name, model, category, quantity)
+        product = Product(id, product_name, model, category, quantity, photo)
 
         repository = Repository()
         repository.save("products", product.__dict__)
