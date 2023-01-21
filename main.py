@@ -3,6 +3,7 @@ from flask import request
 from controllers.ProductController import ProductController
 from controllers.CategoryController import CategoryController
 from controllers.ModelController import ModelController
+from controllers.ProductMockController import ProductMockController
 from exceptions.api.NotFoundException import NotFoundException
 
 app = Flask(__name__)
@@ -144,7 +145,7 @@ def delete_category():
 
     return {}, 204
 
-####################################################################################### 
+#######################################################################################
 
 @app.route('/models', methods=["GET"])
 def get_model():
@@ -206,4 +207,5 @@ def delete_model():
 
 
 if __name__ == '__main__':
+    ProductMockController().save_mock()
     app.run(debug=True)
