@@ -9,6 +9,6 @@ class ProductMockController:
         modelController = ModelController()
         productController = ProductController()
 
-        categoryController.save_category("category 1")
-        modelController.save_model("model 1")
-        productController.save_product("product 1", "model 1", "category 1", 20)
+        category_id = categoryController.save_category("category 1")
+        model_id = modelController.save_model("model 1")
+        productController.save_product("product 1", model_id, category_id, 20)

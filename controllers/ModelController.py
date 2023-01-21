@@ -14,8 +14,8 @@ class ModelController:
             if model_id:
                 custom_message = f"Model not found for id:{model_id}"
             raise NotFoundException(custom_message)
-        
-        return model 
+
+        return model
 
     def save_model(self, model_name):
         id = str(uuid.uuid4())
@@ -30,7 +30,7 @@ class ModelController:
         if not model:
             custom_message = f"Model not found for id: {model_id}"
             raise NotFoundException(custom_message)
-        
+
         model = Model(
             model["id"],
             model["model_name"]
@@ -38,12 +38,12 @@ class ModelController:
 
         if model.model_name:
             model.model_name = model_name
-        
+
         repository = Repository()
         repository.update("model", model_id, model.__dict__)
 
         return model.id
-    
+
     def delete_model(self, model_id):
         model = self.get_model(model_id)
         if not model:

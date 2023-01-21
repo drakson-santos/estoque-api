@@ -14,8 +14,8 @@ class CategoryController:
             if category_id:
                 custom_message = f"Category not found for id:{category_id}"
             raise NotFoundException(custom_message)
-        
-        return category 
+
+        return category
 
     def save_category(self, category_name):
         id = str(uuid.uuid4())
@@ -30,7 +30,7 @@ class CategoryController:
         if not category:
             custom_message = f"Category not found for id: {category_id}"
             raise NotFoundException(custom_message)
-        
+
         category = Category(
             category["id"],
             category["category_name"]
@@ -38,16 +38,16 @@ class CategoryController:
 
         if category.category_name:
             category.category_name = category_name
-        
+
         repository = Repository()
         repository.update("category", category_id, category.__dict__)
 
         return category.id
-    
+
     def delete_category(self, category_id):
         category = self.get_category(category_id)
         if not category:
-            custom_message = f"Category not foundo for id: {category_id}"
+            custom_message = f"Category not found for id: {category_id}"
             raise NotFoundException(custom_message)
 
         repository = Repository()
