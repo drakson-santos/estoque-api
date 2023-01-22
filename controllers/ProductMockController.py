@@ -1,6 +1,6 @@
 from controllers.CategoryController import CategoryController
 from controllers.model.ModelController import ModelController
-from controllers.ProductController import ProductController
+from controllers.product.ProductController import ProductController
 import os
 class ProductMockController:
 

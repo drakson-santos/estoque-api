@@ -3,14 +3,15 @@ from models.Product import Product
 from repository.repository import Repository
 from exceptions.api.NotFoundException import NotFoundException
 from controllers.FileController import FileController
-from controllers.model.ModelController import ModelController
-from controllers.CategoryController import CategoryController
+from repository.inMemoryRepository.inMemory import InMemoryRepository
 
 class ProductController:
 
+    def __init__(self, repository=InMemoryRepository()):
+        self.repository = Repository(repository)
+
     def get_products(self, product_id=None):
-        repository = Repository()
-        products = repository.get("products", product_id)
+        products = self.repository.get("products", product_id)
 
         if not products:
             custom_message = "Products not found"
@@ -28,8 +29,7 @@ class ProductController:
         id = str(uuid.uuid4())
         product = Product(id, product_name, model, category, quantity, photo)
 
-        repository = Repository()
-        repository.save("products", product.__dict__)
+        self.repository.save("products", product.__dict__)
 
         return id
 
@@ -52,12 +52,11 @@ class ProductController:
         if model:
             product.model = model
         if category:
-            product.quantity = category
+            product.category = category
         if quantity:
             product.quantity = quantity
 
-        repository = Repository()
-        repository.update("products", product_id, product.__dict__)
+        self.repository.update("products", product_id, product.__dict__)
 
         return product.id
 
@@ -67,5 +66,4 @@ class ProductController:
             custom_message = f"Product not found for id: {product_id}"
             raise NotFoundException(custom_message)
 
-        repository = Repository()
-        repository.delete("products", product_id)
+        self.repository.delete("products", product_id)
