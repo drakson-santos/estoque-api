@@ -1,4 +1,4 @@
-from controllers.CategoryController import CategoryController
+from controllers.category.CategoryController import CategoryController
 from mocks.category import category_mock
 
 from unittest import TestCase

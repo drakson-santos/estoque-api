@@ -3,7 +3,7 @@ from models.Product import Product
 from repository.repository import Repository
 from exceptions.api.NotFoundException import NotFoundException
 from controllers.FileController import FileController
-from controllers.ModelController import ModelController
+from controllers.model.ModelController import ModelController
 from controllers.CategoryController import CategoryController
 
 class ProductController:

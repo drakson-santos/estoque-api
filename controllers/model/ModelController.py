@@ -2,12 +2,15 @@ import uuid
 from models.Model import Model
 from repository.repository import Repository
 from exceptions.api.NotFoundException import NotFoundException
+from repository.inMemoryRepository.inMemory import InMemoryRepository
 
 class ModelController:
 
+    def __init__(self, repository=InMemoryRepository()):
+        self.repository = Repository(repository)
+
     def get_model(self, model_id=None):
-        repository = Repository()
-        model = repository.get("model", model_id)
+        model = self.repository.get("model", model_id)
 
         if not model:
             custom_message = "Model not found"
@@ -21,8 +24,7 @@ class ModelController:
         id = str(uuid.uuid4())
         model = Model(id, model_name)
 
-        repository = Repository()
-        repository.save("model", model.__dict__)
+        self.repository.save("model", model.__dict__)
         return id
 
     def update_model(self,model_id, model_name = None):
@@ -39,8 +41,7 @@ class ModelController:
         if model.model_name:
             model.model_name = model_name
 
-        repository = Repository()
-        repository.update("model", model_id, model.__dict__)
+        self.repository.update("model", model_id, model.__dict__)
 
         return model.id
 
@@ -50,5 +51,4 @@ class ModelController:
             custom_message = f"Model not foundo for id: {model_id}"
             raise NotFoundException(custom_message)
 
-        repository = Repository()
-        repository.delete("model", model_id)
+        self.repository.delete("model", model_id)
