@@ -3,6 +3,8 @@ from models.Product import Product
 from repository.repository import Repository
 from exceptions.api.NotFoundException import NotFoundException
 from controllers.FileController import FileController
+from controllers.ModelController import ModelController
+from controllers.CategoryController import CategoryController
 
 class ProductController:
 
@@ -15,6 +17,17 @@ class ProductController:
             if product_id:
                 custom_message = f"Product not found for id: {product_id}"
             raise NotFoundException(custom_message)
+
+        modelController = ModelController()
+        categoryController = CategoryController()
+
+        if isinstance(products, list):
+            for product in products:
+                product["model"] = modelController.get_model(model_id=product["model"])
+                product["category"] = categoryController.get_category(category_id=product["category"])
+        else:
+            products["model"] = modelController.get_model(model_id=product["model"])
+            products["category"] = categoryController.get_category(category_id=product["category"])
 
         return products
 
