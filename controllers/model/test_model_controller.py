@@ -70,3 +70,21 @@ class ModelControllerUpdateModel(TestCase):
 
         with self.assertRaises(NotFoundException):
             modelController.update_model("ID INVALID")
+
+class ModelControllerDeleteModel(TestCase):
+
+    def test_it_should_be_possible_to_delete_model(self):
+        modelController = ModelController()
+        model_name = model_mock["model_name"]
+        model_id = modelController.save_model(model_name)
+
+        modelController.delete_model(model_id)
+
+        with self.assertRaises(NotFoundException):
+            modelController.get_model(model_id)
+
+    def test_it_should_not_be_possible_to_delete_model_with_invalid_id(self):
+        modelController = ModelController()
+
+        with self.assertRaises(NotFoundException):
+            modelController.delete_model("ID INVALID")

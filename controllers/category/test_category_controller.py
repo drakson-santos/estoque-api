@@ -74,3 +74,21 @@ class CategoryControllerUpdateCategory(TestCase):
 
         with self.assertRaises(NotFoundException):
             categoryController.update_category("ID INVALID")
+
+class CategoryControllerDeleteCategory(TestCase):
+
+    def test_it_should_be_possible_to_delete_category(self):
+        categoryController = CategoryController()
+        category_name = category_mock["category_name"]
+        category_id = categoryController.save_category(category_name)
+
+        categoryController.delete_category(category_id)
+
+        with self.assertRaises(NotFoundException):
+            categoryController.get_category(category_id)
+
+    def test_it_should_not_be_possible_to_delete_category_with_invalid_id(self):
+        categoryController = CategoryController()
+
+        with self.assertRaises(NotFoundException):
+            categoryController.delete_category("ID INVALID")
