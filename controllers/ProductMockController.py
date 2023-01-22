@@ -1,7 +1,6 @@
-from controllers.CategoryController import CategoryController
+from controllers.category.CategoryController import CategoryController
 from controllers.model.ModelController import ModelController
 from controllers.product.ProductController import ProductController
-import os
 class ProductMockController:
 
     def save_mock(self):

@@ -1,10 +1,12 @@
 from flask import Flask
 from flask import request
 from flask_cors import CORS
+
 from controllers.product.ProductController import ProductController
-from controllers.CategoryController import CategoryController
+from controllers.category.CategoryController import CategoryController
 from controllers.model.ModelController import ModelController
 from controllers.ProductMockController import ProductMockController
+
 from exceptions.api.NotFoundException import NotFoundException
 
 
