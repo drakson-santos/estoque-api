@@ -27,7 +27,7 @@ class CategoryController:
         self.repository.save("category", category.__dict__)
         return id
 
-    def update_category(self,category_id, category_name = None):
+    def update_category(self, category_id, category_name = None):
         category = self.get_category(category_id)
         if not category:
             custom_message = f"Category not found for id: {category_id}"

@@ -47,3 +47,26 @@ class ModelControllerSaveModel(TestCase):
         with self.assertRaises(Exception):
             modelController.save_model()
 
+class ModelControllerUpdateModel(TestCase):
+
+    def test_it_should_be_possible_to_update_model(self):
+        modelController = ModelController()
+        model_name = model_mock["model_name"]
+        model_id = modelController.save_model(model_name)
+
+        old_model = modelController.get_model(model_id)
+
+        after_model_id = modelController.update_model(model_id, "model mock updated")
+        current_model = modelController.get_model(after_model_id)
+
+        self.assertIsInstance(current_model, dict)
+        self.assertIn("id", current_model)
+        self.assertIn("model_name", current_model)
+        self.assertEqual(old_model["id"], current_model["id"])
+        self.assertNotEqual(old_model["model_name"], current_model["model_name"])
+
+    def test_it_should_not_be_possible_to_update_model_with_invalid_id(self):
+        modelController = ModelController()
+
+        with self.assertRaises(NotFoundException):
+            modelController.update_model("ID INVALID")

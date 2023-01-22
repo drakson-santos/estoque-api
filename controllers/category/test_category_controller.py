@@ -51,3 +51,26 @@ class CategoryControllerSaveCategory(TestCase):
         with self.assertRaises(Exception):
             categoryController.save_category()
 
+class CategoryControllerUpdateCategory(TestCase):
+
+    def test_it_should_be_possible_to_update_category(self):
+        categoryController = CategoryController()
+        category_name = category_mock["category_name"]
+        category_id = categoryController.save_category(category_name)
+
+        old_category = categoryController.get_category(category_id)
+
+        after_category_id = categoryController.update_category(category_id, "category mock updated")
+        current_category = categoryController.get_category(after_category_id)
+
+        self.assertIsInstance(current_category, dict)
+        self.assertIn("id", current_category)
+        self.assertIn("category_name", current_category)
+        self.assertEqual(old_category["id"], current_category["id"])
+        self.assertNotEqual(old_category["category_name"], current_category["category_name"])
+
+    def test_it_should_not_be_possible_to_update_category_with_invalid_id(self):
+        categoryController = CategoryController()
+
+        with self.assertRaises(NotFoundException):
+            categoryController.update_category("ID INVALID")
