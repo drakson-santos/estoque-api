@@ -16,6 +16,24 @@ def get_products():
 
     try:
         products = ProductController().get_products(product_id)
+
+        modelController = ModelController()
+        categoryController = CategoryController()
+
+        if isinstance(products, list):
+            for product in products:
+                model_id = product.get("model")
+                category_id = product.get("category")
+                if isinstance(model_id, dict):
+                    model_id = model_id.get("id")
+                    category_id = category_id.get("id")
+
+                product["model"] = modelController.get_model(model_id)
+                product["category"] = categoryController.get_category(category_id)
+        else:
+            products["model"] = modelController.get_model(model_id=product["model"])
+            products["category"] = categoryController.get_category(category_id=product["category"])
+
     except NotFoundException as error:
         return {
             "message": error.message,

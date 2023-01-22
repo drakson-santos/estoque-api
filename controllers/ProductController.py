@@ -18,17 +18,6 @@ class ProductController:
                 custom_message = f"Product not found for id: {product_id}"
             raise NotFoundException(custom_message)
 
-        modelController = ModelController()
-        categoryController = CategoryController()
-
-        if isinstance(products, list):
-            for product in products:
-                product["model"] = modelController.get_model(model_id=product["model"])
-                product["category"] = categoryController.get_category(category_id=product["category"])
-        else:
-            products["model"] = modelController.get_model(model_id=product["model"])
-            products["category"] = categoryController.get_category(category_id=product["category"])
-
         return products
 
     def save_product(self, product_name, model, category, quantity, photo=None):
