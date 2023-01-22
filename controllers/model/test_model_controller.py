@@ -1,9 +1,40 @@
+from unittest import TestCase
 from controllers.model.ModelController import ModelController
 from mocks.model import model_mock
+from exceptions.api.NotFoundException import NotFoundException
 
-from unittest import TestCase
+class ModelControllerGetModel(TestCase):
 
-class ModelControllerSaveCategory(TestCase):
+    def test_it_should_be_possible_to_get_models(self):
+        modelController = ModelController()
+        model_name = model_mock["model_name"]
+        modelController.save_model(model_name)
+
+        models = modelController.get_model()
+
+        self.assertIsInstance(models, list)
+        self.assertIn("id", models[0])
+        self.assertIn("model_name", models[0])
+
+    def test_it_should_be_possible_to_get_model_by_id(self):
+        modelController = ModelController()
+        model_name = model_mock["model_name"]
+        model_id = modelController.save_model(model_name)
+
+        model = modelController.get_model(model_id)
+
+        self.assertIsInstance(model, dict)
+        self.assertIn("id", model)
+        self.assertIn("model_name", model)
+
+    def test_it_should_not_be_possible_to_fetch_model_with_invalid_id(self):
+        modelController = ModelController()
+        invalid_model_id = "ERROR"
+
+        with self.assertRaises(NotFoundException):
+            modelController.get_model(invalid_model_id)
+
+class ModelControllerSaveModel(TestCase):
 
     def test_it_should_be_possible_to_create_model(self):
         modelController = ModelController()
@@ -15,3 +46,4 @@ class ModelControllerSaveCategory(TestCase):
         modelController = ModelController()
         with self.assertRaises(Exception):
             modelController.save_model()
+
