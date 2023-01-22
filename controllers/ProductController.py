@@ -2,6 +2,7 @@ import uuid
 from models.Product import Product
 from repository.repository import Repository
 from exceptions.api.NotFoundException import NotFoundException
+from controllers.FileController import FileController
 
 class ProductController:
 
@@ -18,6 +19,10 @@ class ProductController:
         return products
 
     def save_product(self, product_name, model, category, quantity, photo=None):
+        if photo:
+            fileController = FileController()
+            photo = fileController.save_file(photo)
+
         id = str(uuid.uuid4())
         product = Product(id, product_name, model, category, quantity, photo)
 

@@ -6,12 +6,9 @@ from controllers.CategoryController import CategoryController
 from controllers.ModelController import ModelController
 from controllers.ProductMockController import ProductMockController
 from exceptions.api.NotFoundException import NotFoundException
-from werkzeug.utils import secure_filename
-import os
+
 
 app = Flask(__name__)
-app.config["UPLOAD_FOLDER"] = "static"
-app.config["SERVER_NAME"] = "localhost:5000"
 
 @app.route('/products', methods=["GET"])
 def get_products():
@@ -31,23 +28,11 @@ def get_products():
 
 @app.route('/products', methods=["POST"])
 def save_product():
-    # product_name = request.json["product_name"]
-    # model = request.json["model"]
-    # category = request.json["category"]
-    # quantity = request.json["quantity"]
     product_name = request.form["product_name"]
     model = request.form["model"]
     category = request.form["category"]
     quantity = request.form["quantity"]
     photo = request.files.get("photo")
-
-    if photo:
-        file = request.files['photo']
-        if file.filename != '':
-            filename = secure_filename(file.filename)
-            photo = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-            file.save(photo)
-            photo_url = "http://"+app.config["SERVER_NAME"]+"/"+app.config["UPLOAD_FOLDER"]+"/"+filename
 
     try:
         product_id = ProductController().save_product(
@@ -55,7 +40,7 @@ def save_product():
             model,
             category,
             quantity,
-            photo_url
+            photo
         )
 
     except Exception as error:
