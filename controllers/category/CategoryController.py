@@ -2,11 +2,11 @@ from models.Category import Category
 from models.UniqueId import UniqueId
 from repository.repository import Repository
 from exceptions.api.NotFoundException import NotFoundException
-from repository.inMemoryRepository.inMemory import InMemoryRepository
+from repository.baseRepository import BaseRepository
 
 class CategoryController:
 
-    def __init__(self, repository=InMemoryRepository()):
+    def __init__(self, repository: BaseRepository):
         self.repository = Repository(repository)
 
     def get_category(self, category_id=None):

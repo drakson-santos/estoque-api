@@ -2,11 +2,11 @@ from models.Model import Model
 from models.UniqueId import UniqueId
 from repository.repository import Repository
 from exceptions.api.NotFoundException import NotFoundException
-from repository.inMemoryRepository.inMemory import InMemoryRepository
+from repository.baseRepository import BaseRepository
 
 class ModelController:
 
-    def __init__(self, repository=InMemoryRepository()):
+    def __init__(self, repository: BaseRepository):
         self.repository = Repository(repository)
 
     def get_model(self, model_id=None):

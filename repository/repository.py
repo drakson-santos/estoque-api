@@ -4,7 +4,7 @@ from repository.inMemoryRepository.inMemory import InMemoryRepository
 
 class Repository(BaseRepository):
 
-    def __init__(self, repository=InMemoryRepository()):
+    def __init__(self, repository: BaseRepository):
         self.repository = repository
 
     def get(self, table, id=None):

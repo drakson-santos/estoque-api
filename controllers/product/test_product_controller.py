@@ -2,11 +2,12 @@ from unittest import TestCase
 from controllers.product.ProductController import ProductController
 from mocks.product import product_mock
 from exceptions.api.NotFoundException import NotFoundException
+from repository.inMemoryRepository.inMemory import InMemoryRepository
 
 class ProductControllerGetProduct(TestCase):
 
     def test_it_should_be_possible_to_get_products(self):
-        productController = ProductController()
+        productController = ProductController(InMemoryRepository())
         product_name = product_mock["product_name"]
         model = product_mock["model"]
         category = product_mock["category"]
@@ -24,7 +25,7 @@ class ProductControllerGetProduct(TestCase):
         self.assertIn("quantity", products[0])
 
     def test_it_should_be_possible_to_get_product_by_id(self):
-        productController = ProductController()
+        productController = ProductController(InMemoryRepository())
         product_name = product_mock["product_name"]
         model = product_mock["model"]
         category = product_mock["category"]
@@ -44,7 +45,7 @@ class ProductControllerGetProduct(TestCase):
         self.assertIn("purchase_price", product)
 
     def test_it_should_not_be_possible_to_fetch_product_with_invalid_id(self):
-        productController = ProductController()
+        productController = ProductController(InMemoryRepository())
         invalid_product_id = "ERROR"
 
         with self.assertRaises(NotFoundException):
@@ -53,7 +54,7 @@ class ProductControllerGetProduct(TestCase):
 class ProductControllerSaveProduct(TestCase):
 
     def test_it_should_be_possible_to_create_product(self):
-        productController = ProductController()
+        productController = ProductController(InMemoryRepository())
         product_name = product_mock["product_name"]
         model = product_mock["model"]
         category = product_mock["category"]
@@ -65,7 +66,7 @@ class ProductControllerSaveProduct(TestCase):
         self.assertIsInstance(product_id, str)
 
     def test_it_should_not_be_possible_to_create_product_without_sending_data(self):
-        productController = ProductController()
+        productController = ProductController(InMemoryRepository())
 
         with self.assertRaises(Exception):
             productController.save_product()
@@ -73,7 +74,7 @@ class ProductControllerSaveProduct(TestCase):
 class ProductControllerUpdateProduct(TestCase):
 
     def test_it_should_be_possible_to_update_product(self):
-        productController = ProductController()
+        productController = ProductController(InMemoryRepository())
         product_name = product_mock["product_name"]
         model = product_mock["model"]
         category = product_mock["category"]
@@ -105,7 +106,7 @@ class ProductControllerUpdateProduct(TestCase):
         self.assertNotEqual(old_product["model"], current_product["model"])
 
     def test_it_should_not_be_possible_to_update_product_with_invalid_id(self):
-        productController = ProductController()
+        productController = ProductController(InMemoryRepository())
         invalid_product_id = "ERROR"
 
         with self.assertRaises(Exception):
@@ -114,7 +115,7 @@ class ProductControllerUpdateProduct(TestCase):
 class ProductControllerDeleteProduct(TestCase):
 
     def test_it_should_be_possible_to_delete_product(self):
-        productController = ProductController()
+        productController = ProductController(InMemoryRepository())
         product_name = product_mock["product_name"]
         model = product_mock["model"]
         category = product_mock["category"]
@@ -130,7 +131,7 @@ class ProductControllerDeleteProduct(TestCase):
             productController.get_products(product_id)
 
     def test_it_should_not_be_possible_to_delete_product_with_invalid_id(self):
-        productController = ProductController()
+        productController = ProductController(InMemoryRepository())
         invalid_product_id = "ERROR"
 
         with self.assertRaises(NotFoundException):

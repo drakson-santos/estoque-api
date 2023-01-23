@@ -2,11 +2,12 @@ from unittest import TestCase
 from controllers.model.ModelController import ModelController
 from mocks.model import model_mock
 from exceptions.api.NotFoundException import NotFoundException
+from repository.inMemoryRepository.inMemory import InMemoryRepository
 
 class ModelControllerGetModel(TestCase):
 
     def test_it_should_be_possible_to_get_models(self):
-        modelController = ModelController()
+        modelController = ModelController(InMemoryRepository())
         model_name = model_mock["model_name"]
         modelController.save_model(model_name)
 
@@ -17,7 +18,7 @@ class ModelControllerGetModel(TestCase):
         self.assertIn("model_name", models[0])
 
     def test_it_should_be_possible_to_get_model_by_id(self):
-        modelController = ModelController()
+        modelController = ModelController(InMemoryRepository())
         model_name = model_mock["model_name"]
         model_id = modelController.save_model(model_name)
 
@@ -28,7 +29,7 @@ class ModelControllerGetModel(TestCase):
         self.assertIn("model_name", model)
 
     def test_it_should_not_be_possible_to_fetch_model_with_invalid_id(self):
-        modelController = ModelController()
+        modelController = ModelController(InMemoryRepository())
         invalid_model_id = "ERROR"
 
         with self.assertRaises(NotFoundException):
@@ -37,20 +38,20 @@ class ModelControllerGetModel(TestCase):
 class ModelControllerSaveModel(TestCase):
 
     def test_it_should_be_possible_to_create_model(self):
-        modelController = ModelController()
+        modelController = ModelController(InMemoryRepository())
         model_name = model_mock["model_name"]
         model_id = modelController.save_model(model_name)
         self.assertIsInstance(model_id, str)
 
     def test_it_should_not_be_possible_to_create_model_without_sending_data(self):
-        modelController = ModelController()
+        modelController = ModelController(InMemoryRepository())
         with self.assertRaises(Exception):
             modelController.save_model()
 
 class ModelControllerUpdateModel(TestCase):
 
     def test_it_should_be_possible_to_update_model(self):
-        modelController = ModelController()
+        modelController = ModelController(InMemoryRepository())
         model_name = model_mock["model_name"]
         model_id = modelController.save_model(model_name)
 
@@ -66,7 +67,7 @@ class ModelControllerUpdateModel(TestCase):
         self.assertNotEqual(old_model["model_name"], current_model["model_name"])
 
     def test_it_should_not_be_possible_to_update_model_with_invalid_id(self):
-        modelController = ModelController()
+        modelController = ModelController(InMemoryRepository())
 
         with self.assertRaises(NotFoundException):
             modelController.update_model("ID INVALID")
@@ -74,7 +75,7 @@ class ModelControllerUpdateModel(TestCase):
 class ModelControllerDeleteModel(TestCase):
 
     def test_it_should_be_possible_to_delete_model(self):
-        modelController = ModelController()
+        modelController = ModelController(InMemoryRepository())
         model_name = model_mock["model_name"]
         model_id = modelController.save_model(model_name)
 
@@ -84,7 +85,7 @@ class ModelControllerDeleteModel(TestCase):
             modelController.get_model(model_id)
 
     def test_it_should_not_be_possible_to_delete_model_with_invalid_id(self):
-        modelController = ModelController()
+        modelController = ModelController(InMemoryRepository())
 
         with self.assertRaises(NotFoundException):
             modelController.delete_model("ID INVALID")

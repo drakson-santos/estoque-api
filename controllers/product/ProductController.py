@@ -4,10 +4,11 @@ from repository.repository import Repository
 from exceptions.api.NotFoundException import NotFoundException
 from controllers.FileController import FileController
 from repository.inMemoryRepository.inMemory import InMemoryRepository
+from repository.baseRepository import BaseRepository
 
 class ProductController:
 
-    def __init__(self, repository=InMemoryRepository()):
+    def __init__(self, repository: BaseRepository):
         self.repository = Repository(repository)
 
     def get_products(self, product_id=None):

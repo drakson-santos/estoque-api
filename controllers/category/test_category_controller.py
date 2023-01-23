@@ -2,12 +2,12 @@ from unittest import TestCase
 from controllers.category.CategoryController import CategoryController
 from mocks.category import category_mock
 from exceptions.api.NotFoundException import NotFoundException
-
+from repository.inMemoryRepository.inMemory import InMemoryRepository
 
 class CategoryControllerGetCategory(TestCase):
 
     def test_it_should_be_possible_to_get_categories(self):
-        categoryController = CategoryController()
+        categoryController = CategoryController(InMemoryRepository())
         category_name = category_mock["category_name"]
         categoryController.save_category(category_name)
 
@@ -18,7 +18,7 @@ class CategoryControllerGetCategory(TestCase):
         self.assertIn("category_name", categories[0])
 
     def test_it_should_be_possible_to_get_category_by_id(self):
-        categoryController = CategoryController()
+        categoryController = CategoryController(InMemoryRepository())
         category_name = category_mock["category_name"]
         category_id = categoryController.save_category(category_name)
 
@@ -29,7 +29,7 @@ class CategoryControllerGetCategory(TestCase):
         self.assertIn("category_name", category)
 
     def test_it_should_not_be_possible_to_fetch_category_with_invalid_id(self):
-        categoryController = CategoryController()
+        categoryController = CategoryController(InMemoryRepository())
         invalid_category_id = "ERROR"
 
         with self.assertRaises(NotFoundException):
@@ -38,7 +38,7 @@ class CategoryControllerGetCategory(TestCase):
 class CategoryControllerSaveCategory(TestCase):
 
     def test_it_should_be_possible_to_create_category(self):
-        categoryController = CategoryController()
+        categoryController = CategoryController(InMemoryRepository())
         category_name = category_mock["category_name"]
 
         category_id = categoryController.save_category(category_name)
@@ -46,7 +46,7 @@ class CategoryControllerSaveCategory(TestCase):
         self.assertIsInstance(category_id, str)
 
     def test_it_should_not_be_possible_to_create_category_without_sending_data(self):
-        categoryController = CategoryController()
+        categoryController = CategoryController(InMemoryRepository())
 
         with self.assertRaises(Exception):
             categoryController.save_category()
@@ -54,7 +54,7 @@ class CategoryControllerSaveCategory(TestCase):
 class CategoryControllerUpdateCategory(TestCase):
 
     def test_it_should_be_possible_to_update_category(self):
-        categoryController = CategoryController()
+        categoryController = CategoryController(InMemoryRepository())
         category_name = category_mock["category_name"]
         category_id = categoryController.save_category(category_name)
 
@@ -70,7 +70,7 @@ class CategoryControllerUpdateCategory(TestCase):
         self.assertNotEqual(old_category["category_name"], current_category["category_name"])
 
     def test_it_should_not_be_possible_to_update_category_with_invalid_id(self):
-        categoryController = CategoryController()
+        categoryController = CategoryController(InMemoryRepository())
 
         with self.assertRaises(NotFoundException):
             categoryController.update_category("ID INVALID")
@@ -78,7 +78,7 @@ class CategoryControllerUpdateCategory(TestCase):
 class CategoryControllerDeleteCategory(TestCase):
 
     def test_it_should_be_possible_to_delete_category(self):
-        categoryController = CategoryController()
+        categoryController = CategoryController(InMemoryRepository())
         category_name = category_mock["category_name"]
         category_id = categoryController.save_category(category_name)
 
@@ -88,7 +88,7 @@ class CategoryControllerDeleteCategory(TestCase):
             categoryController.get_category(category_id)
 
     def test_it_should_not_be_possible_to_delete_category_with_invalid_id(self):
-        categoryController = CategoryController()
+        categoryController = CategoryController(InMemoryRepository())
 
         with self.assertRaises(NotFoundException):
             categoryController.delete_category("ID INVALID")
