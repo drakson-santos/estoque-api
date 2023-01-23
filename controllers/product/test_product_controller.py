@@ -89,7 +89,7 @@ class ProductControllerUpdateProduct(TestCase):
         current_category = "updated"
         current_quantity = 89179312
 
-        productController.update_product(product_id, current_product_name, current_model, current_category, current_quantity)
+        productController.update_product(product_id, current_product_name, current_model, current_category, sale_price, purchase_price, current_quantity)
         current_product = productController.get_products(product_id)
 
         self.assertIsInstance(current_product, dict)

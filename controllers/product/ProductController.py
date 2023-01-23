@@ -34,7 +34,7 @@ class ProductController:
 
         return id
 
-    def update_product(self, product_id, product_name=None, model=None, category=None, quantity=None):
+    def update_product(self, product_id, product_name=None, model=None, category=None, sale_price=None, purchase_price=None, quantity=None):
         product = self.get_products(product_id)
         if not product:
             custom_message = f"Product not found for id: {product_id}"

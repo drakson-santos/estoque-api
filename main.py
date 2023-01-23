@@ -53,6 +53,8 @@ def save_product():
     category = request.form["category"]
     quantity = request.form["quantity"]
     photo = request.files.get("photo")
+    sale_price = request.json.get("sale_price")
+    purchase_price = request.json.get("purchase_price")
 
     try:
         product_id = ProductController(InMemoryRepository()).save_product(
@@ -60,7 +62,9 @@ def save_product():
             model,
             category,
             quantity,
-            photo
+            photo,
+            sale_price,
+            purchase_price
         )
 
     except Exception as error:
@@ -80,6 +84,8 @@ def update_product():
     model = request.json.get("model")
     category = request.json.get("category")
     quantity = request.json.get("quantity")
+    sale_price = request.json.get("sale_price")
+    purchase_price = request.json.get("purchase_price")
 
     try:
         product_id = ProductController(InMemoryRepository()).update_product(
@@ -87,7 +93,9 @@ def update_product():
             product_name,
             model,
             category,
-            quantity
+            quantity,
+            sale_price,
+            purchase_price
         )
     except NotFoundException as error:
         return {
