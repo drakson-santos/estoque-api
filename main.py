@@ -6,9 +6,9 @@ from controllers.product.ProductController import ProductController
 from controllers.category.CategoryController import CategoryController
 from controllers.model.ModelController import ModelController
 from controllers.ProductMockController import ProductMockController
-
 from exceptions.api.NotFoundException import NotFoundException
 
+from repository.inMemoryRepository.inMemory import InMemoryRepository
 
 app = Flask(__name__)
 
@@ -17,10 +17,10 @@ def get_products():
     product_id =  request.args.get("product_id")
 
     try:
-        products = ProductController().get_products(product_id)
+        products = ProductController(InMemoryRepository()).get_products(product_id)
 
-        modelController = ModelController()
-        categoryController = CategoryController()
+        modelController = ModelController(InMemoryRepository())
+        categoryController = CategoryController(InMemoryRepository())
 
         if isinstance(products, list):
             for product in products:
@@ -55,7 +55,7 @@ def save_product():
     photo = request.files.get("photo")
 
     try:
-        product_id = ProductController().save_product(
+        product_id = ProductController(InMemoryRepository()).save_product(
             product_name,
             model,
             category,
@@ -82,7 +82,7 @@ def update_product():
     quantity = request.json.get("quantity")
 
     try:
-        product_id = ProductController().update_product(
+        product_id = ProductController(InMemoryRepository()).update_product(
             product_id,
             product_name,
             model,
@@ -103,7 +103,7 @@ def delete_product():
     product_id =  request.args.get("product_id")
 
     try:
-        ProductController().delete_product(product_id)
+        ProductController(InMemoryRepository()).delete_product(product_id)
     except NotFoundException as error:
         return {
             "message": error.message,
@@ -116,7 +116,7 @@ def delete_product():
 def get_categories():
     category_id =  request.args.get("category_id")
     try:
-        category = CategoryController().get_category(category_id)
+        category = CategoryController(InMemoryRepository()).get_category(category_id)
     except NotFoundException as error:
         return {
             "message": error.message,
@@ -131,7 +131,7 @@ def save_category():
     category_name = request.json["category_name"]
 
     try:
-        CategoryController().save_category(category_name)
+        CategoryController(InMemoryRepository()).save_category(category_name)
     except Exception as error:
         return{
             "message": str(error.message),
@@ -146,7 +146,7 @@ def update_category():
     category_name = request.json.get("category_name")
 
     try:
-        CategoryController().update_category(category_id, category_name)
+        CategoryController(InMemoryRepository()).update_category(category_id, category_name)
     except NotFoundException as error:
         return{
             "message": error.message,
@@ -161,7 +161,7 @@ def delete_category():
     category_id = request.args.get("category_id")
 
     try:
-        CategoryController().delete_category(category_id)
+        CategoryController(InMemoryRepository()).delete_category(category_id)
     except NotFoundException as error:
         return {
             "message": error.message
@@ -175,7 +175,7 @@ def delete_category():
 def get_model():
     model_id =  request.args.get("model_id")
     try:
-        model = ModelController().get_model(model_id)
+        model = ModelController(InMemoryRepository()).get_model(model_id)
     except NotFoundException as error:
         return {
             "message": error.message,
@@ -190,7 +190,7 @@ def save_model():
     model_name = request.json["model_name"]
 
     try:
-        ModelController().save_model(model_name)
+        ModelController(InMemoryRepository()).save_model(model_name)
     except Exception as error:
         return{
             "message": str(error.message),
@@ -205,7 +205,7 @@ def update_model():
     model_name = request.json.get("model_name")
 
     try:
-        ModelController().update_model(model_id, model_name)
+        ModelController(InMemoryRepository()).update_model(model_id, model_name)
     except NotFoundException as error:
         return{
             "message": error.message,
@@ -220,7 +220,7 @@ def delete_model():
     model_id = request.args.get("model_id")
 
     try:
-        ModelController().delete_model(model_id)
+        ModelController(InMemoryRepository()).delete_model(model_id)
     except NotFoundException as error:
         return {
             "message": error.message
