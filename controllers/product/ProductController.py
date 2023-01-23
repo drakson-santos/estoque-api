@@ -3,7 +3,6 @@ from models.UniqueId import UniqueId
 from repository.repository import Repository
 from exceptions.api.NotFoundException import NotFoundException
 from controllers.FileController import FileController
-from repository.inMemoryRepository.inMemory import InMemoryRepository
 from repository.baseRepository import BaseRepository
 
 class ProductController:
