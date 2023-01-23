@@ -1,5 +1,5 @@
-import uuid
 from models.Model import Model
+from models.UniqueId import UniqueId
 from repository.repository import Repository
 from exceptions.api.NotFoundException import NotFoundException
 from repository.inMemoryRepository.inMemory import InMemoryRepository
@@ -21,7 +21,7 @@ class ModelController:
         return model
 
     def save_model(self, model_name):
-        id = str(uuid.uuid4())
+        id = UniqueId.get_unique_id()
         model = Model(id, model_name)
 
         self.repository.save("model", model.__dict__)

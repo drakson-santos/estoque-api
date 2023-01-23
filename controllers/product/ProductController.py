@@ -1,5 +1,5 @@
-import uuid
 from models.Product import Product
+from models.UniqueId import UniqueId
 from repository.repository import Repository
 from exceptions.api.NotFoundException import NotFoundException
 from controllers.FileController import FileController
@@ -26,7 +26,7 @@ class ProductController:
             fileController = FileController()
             photo = fileController.save_file(photo)
 
-        id = str(uuid.uuid4())
+        id = UniqueId.get_unique_id()
         product = Product(id, product_name, model, category, quantity, photo)
 
         self.repository.save("products", product.__dict__)

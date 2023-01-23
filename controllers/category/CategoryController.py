@@ -1,5 +1,5 @@
-import uuid
 from models.Category import Category
+from models.UniqueId import UniqueId
 from repository.repository import Repository
 from exceptions.api.NotFoundException import NotFoundException
 from repository.inMemoryRepository.inMemory import InMemoryRepository
@@ -21,7 +21,7 @@ class CategoryController:
         return category
 
     def save_category(self, category_name):
-        id = str(uuid.uuid4())
+        id = UniqueId.get_unique_id()
         category = Category(id, category_name)
 
         self.repository.save("category", category.__dict__)
