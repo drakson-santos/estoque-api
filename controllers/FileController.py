@@ -1,6 +1,5 @@
 import os
 import uuid
-from werkzeug.utils import secure_filename
 
 class FileController:
 
