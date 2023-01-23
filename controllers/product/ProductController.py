@@ -21,13 +21,13 @@ class ProductController:
 
         return products
 
-    def save_product(self, product_name, model, category, quantity, photo=None):
+    def save_product(self, product_name, model, category, quantity, sale_price, purchase_price, photo=None):
         if photo:
             fileController = FileController()
             photo = fileController.save_file(photo)
 
         id = UniqueId.get_unique_id()
-        product = Product(id, product_name, model, category, quantity, photo)
+        product = Product(id, product_name, model, category, quantity, sale_price, purchase_price, photo)
 
         self.repository.save("products", product.__dict__)
 
@@ -44,7 +44,9 @@ class ProductController:
             product["product_name"],
             product["model"],
             product["category"],
-            product["quantity"]
+            product["quantity"],
+            product["sale_price"],
+            product["purchase_price"],
         )
 
         if product_name:

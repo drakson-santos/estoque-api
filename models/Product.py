@@ -1,9 +1,11 @@
 class Product:
 
-    def __init__(self,id, product_name, model, category, quantity, photo=None):
+    def __init__(self,id, product_name, model, category, quantity, sale_price, purchase_price, photo=None):
         self.id = id
         self.product_name = product_name
         self.model = model
         self.category = category
         self.quantity = quantity
+        self.sale_price = sale_price
+        self.purchase_price = purchase_price
         self.photo = photo
