@@ -17,3 +17,7 @@ class IDatabase(ABC):
     @abstractmethod
     def delete(self, sql, params=None):
         pass
+
+    @abstractmethod
+    def create_table_if_not_exists(self, table_name, sql):
+        pass
