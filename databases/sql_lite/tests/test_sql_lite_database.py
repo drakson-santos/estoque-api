@@ -1,6 +1,4 @@
 import unittest
-import sqlite3
-from databases import IDatabase
 from databases.sql_lite import SqlLiteDatabase
 
 class TestSqlLiteDatabase(unittest.TestCase):
