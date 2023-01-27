@@ -24,14 +24,14 @@ class ProductController:
             product_photo
         )
 
-    # def get_product(self, id):
-    #     return self.product_repository.read(id)
+    def get_product(self, id):
+        return self.product_repository.read(id)
 
-    # def update_product(self, id, product_name):
-    #     return self.product_repository.update(id, product_name)
+    def update_product(self, id, product_name):
+        return self.product_repository.update(id, product_name)
 
-    # def delete_product(self, id):
-    #     return self.product_repository.delete(id)
+    def delete_product(self, id):
+        return self.product_repository.delete(id)
 
-    # def get_all_products(self):
-    #     return self.product_repository.read()
+    def get_all_products(self):
+        return self.product_repository.read()
