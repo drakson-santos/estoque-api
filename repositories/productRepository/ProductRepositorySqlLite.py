@@ -36,6 +36,11 @@ class ProductRepositorySqlLite(IRepository):
             photo
         )
 
+    def read(self, product_id=None):
+        if product_id:
+            return self.get_by_id(product_id)
+        return self.get_all()
+
     def get_all(self):
         sql = 'SELECT * FROM products'
         rows = self.database.read(sql)

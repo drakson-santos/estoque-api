@@ -6,14 +6,14 @@ class IRepository(ABC):
     def create(self, object):
         pass
 
-    # @abstractmethod
-    # def read(self, object_id):
-    #     pass
+    @abstractmethod
+    def read(self, object_id):
+        pass
 
-    # @abstractmethod
-    # def update(self, object):
-    #     pass
+    @abstractmethod
+    def update(self, object):
+        pass
 
-    # @abstractmethod
-    # def delete(self, object_id):
-    #     pass
+    @abstractmethod
+    def delete(self, object_id):
+        pass
