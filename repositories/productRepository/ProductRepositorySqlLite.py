@@ -51,19 +51,6 @@ class ProductRepositorySqlLite(IRepository):
             return row
         return None
 
-    def update(self, product):
-        sql = 'UPDATE products SET name = ?, model = ?, category = ?, quantity = ?, sale_price = ?, purchase_price = ?, photo = ? WHERE id = ?'
-        self.database.update(sql, (
-            product.product_name,
-            product.product_model,
-            product.product_category,
-            product.product_quantity,
-            product.product_sale_price,
-            product.product_purchase_price,
-            product.product_photo,
-            product.id
-        ))
-
     def delete(self, product_id):
         sql = 'DELETE FROM products WHERE id = ?'
         self.database.delete(sql, (product_id,))
@@ -94,7 +81,7 @@ class ProductRepositorySqlLite(IRepository):
             update_values.append(purchase_price)
         if photo:
             update_query += " photo = ?,"
-        update_values.append(photo)
+            update_values.append(photo)
 
         # remove last comma
         update_query = update_query[:-1]

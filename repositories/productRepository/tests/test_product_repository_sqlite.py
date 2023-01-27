@@ -57,3 +57,13 @@ class TestProductRepositorySqlLite(unittest.TestCase):
         result = self.product_repository.get_by_id("1")
         self.database.read.assert_called_once_with("SELECT * FROM products WHERE id = ?", ("1",))
         self.assertEqual(result, product)
+
+    def test_update(self):
+        product = Product("1", "name", "model", "category", 10, 10.0, 20.0, "photo.jpg")
+        self.product_repository.update(product.id, name='new name', model='new model', category='new category', quantity=15, sale_price=12.5, purchase_price=20.0)
+        self.database.update.assert_called_once_with("UPDATE products SET name = ?, model = ?, category = ?, quantity = ?, sale_price = ?, purchase_price = ? WHERE id = ?", ('new name', 'new model', 'new category', 15, 12.5, 20.0, product.id))
+
+    def test_delete(self):
+        self.product_repository.delete("1")
+        self.database.delete.assert_called_once_with("DELETE FROM products WHERE id = ?", ("1",))
+
