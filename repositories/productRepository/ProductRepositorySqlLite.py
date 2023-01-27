@@ -9,7 +9,7 @@ class ProductRepositorySqlLite(IRepository):
         self.create_table_if_not_exists()
 
     def create_table_if_not_exists(self):
-        sql = f"CREATE TABLE products (id TEXT PRIMARY KEY, product_name TEXT)"
+        sql = f"CREATE TABLE products (id TEXT PRIMARY KEY,  product_model TEXT, product_category TEXT, product_quantity INTEGER, product_sale_price FLOAT, product_purchase_price FLOAT, product_photo TEXT)"
         self.database.create_table_if_not_exists("products", sql)
 
     def create(self,
