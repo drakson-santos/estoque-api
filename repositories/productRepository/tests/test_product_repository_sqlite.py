@@ -3,6 +3,7 @@ from unittest.mock import MagicMock
 from repositories.productRepository import ProductRepositorySqlLite
 from databases import IDatabase
 from mocks import product_mock
+from models import Product
 
 class TestProductRepositorySqlLite(unittest.TestCase):
 
@@ -23,7 +24,7 @@ class TestProductRepositorySqlLite(unittest.TestCase):
         product_purchase_price = product_mock["purchase_price"]
         product_photo = product_mock["photo"]
 
-        self.product_repository.create(
+        product = self.product_repository.create(
             product_name,
             product_model,
             product_category,
@@ -33,3 +34,26 @@ class TestProductRepositorySqlLite(unittest.TestCase):
             product_photo
         )
         self.database.create.assert_called_once()
+        self.assertIsInstance(product, Product)
+        self.assertEqual(product.name, product_name)
+        self.assertEqual(product.model, product_model)
+        self.assertEqual(product.category, product_category)
+        self.assertEqual(product.quantity, product_quantity)
+        self.assertEqual(product.sale_price, product_sale_price)
+        self.assertEqual(product.purchase_price, product_purchase_price)
+        self.assertEqual(product.photo, product_photo)
+
+    def test_get_all(self):
+        products = [Product("1", "name1", "model1", "category1", 10, 10.0, 20.0, "photo1.jpg"),
+                    Product("2", "name2", "model2", "category2", 20, 20.0, 30.0, "photo2.jpg")]
+        self.database.read.return_value = products
+        result = self.product_repository.get_all()
+        self.database.read.assert_called_once_with("SELECT * FROM products")
+        self.assertListEqual(result, products)
+
+    def test_get_by_id(self):
+        product = Product("1", "name", "model", "category", 10, 10.0, 20.0, "photo.jpg")
+        self.database.read.return_value = [product]
+        result = self.product_repository.get_by_id("1")
+        self.database.read.assert_called_once_with("SELECT * FROM products WHERE id = ?", ("1",))
+        self.assertEqual(result, product)

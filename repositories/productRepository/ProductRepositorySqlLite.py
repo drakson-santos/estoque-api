@@ -38,17 +38,17 @@ class ProductRepositorySqlLite(IRepository):
 
     def get_all(self):
         sql = 'SELECT * FROM products'
-        rows = self.database.query(sql)
+        rows = self.database.read(sql)
         products = []
         for row in rows:
-            products.append(Product(*row))
+            products.append(row)
         return products
 
     def get_by_id(self, product_id):
         sql = 'SELECT * FROM products WHERE id = ?'
-        row = self.database.query(sql, (product_id,)).fetchone()
+        row = self.database.read(sql, (product_id,))[0]
         if row:
-            return Product(*row)
+            return row
         return None
 
     def update(self, product):
