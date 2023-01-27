@@ -1,0 +1,1 @@
+from mocks.product import product_mock
