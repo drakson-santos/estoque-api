@@ -12,7 +12,7 @@ class TestProductRepositorySqlLite(unittest.TestCase):
 
     def test_create_table_if_not_exists(self):
         self.product_repository.create_table_if_not_exists()
-        self.database.create_table_if_not_exists.assert_called_with("products", "CREATE TABLE products (id TEXT PRIMARY KEY,  product_model TEXT, product_category TEXT, product_quantity INTEGER, product_sale_price FLOAT, product_purchase_price FLOAT, product_photo TEXT)")
+        self.database.create_table_if_not_exists.assert_called_with("products", "CREATE TABLE products (id TEXT PRIMARY KEY,  name TEXT, model TEXT, category TEXT, quantity INTEGER, sale_price FLOAT, purchase_price FLOAT, photo TEXT)")
 
     def test_create(self):
         product_name = product_mock["product_name"]

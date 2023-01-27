@@ -9,39 +9,31 @@ class ProductRepositorySqlLite(IRepository):
         self.create_table_if_not_exists()
 
     def create_table_if_not_exists(self):
-        sql = f"CREATE TABLE products (id TEXT PRIMARY KEY,  product_model TEXT, product_category TEXT, product_quantity INTEGER, product_sale_price FLOAT, product_purchase_price FLOAT, product_photo TEXT)"
+        sql = f"CREATE TABLE products (id TEXT PRIMARY KEY,  name TEXT, model TEXT, category TEXT, quantity INTEGER, sale_price FLOAT, purchase_price FLOAT, photo TEXT)"
         self.database.create_table_if_not_exists("products", sql)
 
-    def create(self,
-        product_name,
-        product_model,
-        product_category,
-        product_quantity,
-        product_sale_price,
-        product_purchase_price,
-        product_photo
-    ):
-        sql = 'INSERT INTO products (id, product_name, product_model, product_category, product_quantity, product_sale_price, product_purchase_price, product_photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
+    def create(self, name, model, category, quantity, sale_price, purchase_price, photo):
+        sql = 'INSERT INTO products (id, name, model, category, quantity, sale_price, purchase_price, photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
         product_id = str(uuid.uuid4())
         product_id = self.database.create(sql, (
             product_id,
-            product_name,
-            product_model,
-            product_category,
-            product_quantity,
-            product_sale_price,
-            product_purchase_price,
-            product_photo
+            name,
+            model,
+            category,
+            quantity,
+            sale_price,
+            purchase_price,
+            photo
         ))
         return Product(
             product_id,
-            product_name,
-            product_model,
-            product_category,
-            product_quantity,
-            product_sale_price,
-            product_purchase_price,
-            product_photo
+            name,
+            model,
+            category,
+            quantity,
+            sale_price,
+            purchase_price,
+            photo
         )
 
     def get_all(self):
@@ -60,7 +52,7 @@ class ProductRepositorySqlLite(IRepository):
         return None
 
     def update(self, product):
-        sql = 'UPDATE products SET product_name = ?, product_model = ?, product_category = ?, product_quantity = ?, product_sale_price = ?, product_purchase_price = ?, product_photo = ? WHERE id = ?'
+        sql = 'UPDATE products SET name = ?, model = ?, category = ?, quantity = ?, sale_price = ?, purchase_price = ?, photo = ? WHERE id = ?'
         self.database.update(sql, (
             product.product_name,
             product.product_model,
@@ -76,33 +68,33 @@ class ProductRepositorySqlLite(IRepository):
         sql = 'DELETE FROM products WHERE id = ?'
         self.database.delete(sql, (product_id,))
 
-    def update(self, product_id, product_name=None, product_model=None, product_category=None, product_quantity=None, product_sale_price=None, product_purchase_price=None, product_photo=None):
+    def update(self, product_id, name=None, model=None, category=None, quantity=None, sale_price=None, purchase_price=None, photo=None):
         """
         Update product in the repository
         """
         update_query = "UPDATE products SET"
         update_values = []
-        if product_name:
-            update_query += " product_name = ?,"
-            update_values.append(product_name)
-        if product_model:
-            update_query += " product_model = ?,"
-            update_values.append(product_model)
-        if product_category:
-            update_query += " product_category = ?,"
-            update_values.append(product_category)
-        if product_quantity:
-            update_query += " product_quantity = ?,"
-            update_values.append(product_quantity)
-        if product_sale_price:
-            update_query += " product_sale_price = ?,"
-            update_values.append(product_sale_price)
-        if product_purchase_price:
-            update_query += " product_purchase_price = ?,"
-            update_values.append(product_purchase_price)
-        if product_photo:
-            update_query += " product_photo = ?,"
-        update_values.append(product_photo)
+        if name:
+            update_query += " name = ?,"
+            update_values.append(name)
+        if model:
+            update_query += " model = ?,"
+            update_values.append(model)
+        if category:
+            update_query += " category = ?,"
+            update_values.append(category)
+        if quantity:
+            update_query += " quantity = ?,"
+            update_values.append(quantity)
+        if sale_price:
+            update_query += " sale_price = ?,"
+            update_values.append(sale_price)
+        if purchase_price:
+            update_query += " purchase_price = ?,"
+            update_values.append(purchase_price)
+        if photo:
+            update_query += " photo = ?,"
+        update_values.append(photo)
 
         # remove last comma
         update_query = update_query[:-1]
