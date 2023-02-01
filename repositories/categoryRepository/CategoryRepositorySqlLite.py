@@ -37,7 +37,7 @@ class CategoryRepositorySqlLite(IRepository):
         sql = 'SELECT * FROM categories WHERE id = ?'
         row = self.database.read(sql, (category_id,))[0]
         if row:
-            return row
+            return Category(row[0], row[1])
         return None
 
     def delete(self, category_id):
