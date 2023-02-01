@@ -4,7 +4,7 @@ from databases.sql_lite import SqlLiteDatabase
 from repositories.modelRepository import ModelRepositorySqlLite
 from controllers.model.ModelController import ModelController
 
-bp_models = Blueprint("categories", __name__)
+bp_models = Blueprint("models", __name__)
 
 
 @bp_models.route("/model", methods=["POST"])
