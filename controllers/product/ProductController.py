@@ -11,8 +11,8 @@ class ProductController:
     def get_product(self, id):
         return self.product_repository.read(id)
 
-    def update_product(self, id, product_name):
-        return self.product_repository.update(id, product_name)
+    def update_product(self, id, name, model, category, quantity, sale_price, purchase_price, photo):
+        return self.product_repository.update(id, name, model, category, quantity, sale_price, purchase_price, photo)
 
     def delete_product(self, id):
         return self.product_repository.delete(id)

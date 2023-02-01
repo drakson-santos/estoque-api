@@ -11,4 +11,13 @@ class Product:
         self.photo = photo
 
     def to_json(self):
-        return {'id': self.id, 'name': self.name}
+        return {
+            'id': self.id,
+            'name': self.name,
+            'model': self.model,
+            'category': self.category,
+            'quantity': self.quantity,
+            'sale_price': self.sale_price,
+            'purchase_price': self.purchase_price,
+            'photo': self.photo
+        }

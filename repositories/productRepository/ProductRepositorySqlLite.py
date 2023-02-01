@@ -46,14 +46,16 @@ class ProductRepositorySqlLite(IRepository):
         rows = self.database.read(sql)
         products = []
         for row in rows:
-            products.append(row)
+            product = Product(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
+            products.append(product)
         return products
 
     def get_by_id(self, product_id):
         sql = 'SELECT * FROM products WHERE id = ?'
         row = self.database.read(sql, (product_id,))[0]
         if row:
-            return row
+            product = Product(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
+            return product
         return None
 
     def delete(self, product_id):
