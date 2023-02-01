@@ -9,3 +9,6 @@ class Product:
         self.sale_price = sale_price
         self.purchase_price = purchase_price
         self.photo = photo
+
+    def to_json(self):
+        return {'id': self.id, 'name': self.name}
