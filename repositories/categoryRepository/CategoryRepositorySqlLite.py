@@ -29,7 +29,8 @@ class CategoryRepositorySqlLite(IRepository):
         rows = self.database.read(sql)
         categories = []
         for row in rows:
-            categories.append(row)
+            category = Category(row[0], row[1])
+            categories.append(category)
         return categories
 
     def get_by_id(self, category_id):
