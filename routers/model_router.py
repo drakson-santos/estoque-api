@@ -4,10 +4,10 @@ from databases.sql_lite import SqlLiteDatabase
 from repositories.modelRepository import ModelRepositorySqlLite
 from controllers.model.ModelController import ModelController
 
-bp_categories = Blueprint("categories", __name__)
+bp_models = Blueprint("categories", __name__)
 
 
-@bp_categories.route("/model", methods=["POST"])
+@bp_models.route("/model", methods=["POST"])
 def create_model():
     data_base = SqlLiteDatabase()
     model_repository = ModelRepositorySqlLite(data_base)
@@ -17,7 +17,7 @@ def create_model():
     model = model_controller.create_model(name)
     return jsonify({"model": model.to_json()})
 
-@bp_categories.route("/model/int:id", methods=["GET"])
+@bp_models.route("/model/int:id", methods=["GET"])
 def get_model(id):
     data_base = SqlLiteDatabase()
     model_repository = ModelRepositorySqlLite(data_base)
@@ -26,7 +26,7 @@ def get_model(id):
     model = model_controller.get_model(id)
     return jsonify({"model": model.to_json()})
 
-@bp_categories.route("/model/int:id", methods=["PUT"])
+@bp_models.route("/model/int:id", methods=["PUT"])
 def update_model(id):
     data_base = SqlLiteDatabase()
     model_repository = ModelRepositorySqlLite(data_base)
@@ -36,7 +36,7 @@ def update_model(id):
     model = model_controller.update_model(id, model_name)
     return jsonify({"model": model.to_json()})
 
-@bp_categories.route("/model/int:id", methods=["DELETE"])
+@bp_models.route("/model/int:id", methods=["DELETE"])
 def delete_model(id):
     data_base = SqlLiteDatabase()
     model_repository = ModelRepositorySqlLite(data_base)
@@ -45,7 +45,7 @@ def delete_model(id):
     model_controller.delete_model(id)
     return jsonify({"message": "Model deleted successfully."})
 
-@bp_categories.route("/categories", methods=["GET"])
+@bp_models.route("/categories", methods=["GET"])
 def get_all_categories():
     data_base = SqlLiteDatabase()
     model_repository = ModelRepositorySqlLite(data_base)
