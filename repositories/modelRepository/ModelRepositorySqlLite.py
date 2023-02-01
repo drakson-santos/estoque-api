@@ -29,14 +29,15 @@ class ModelRepositorySqlLite(IRepository):
         rows = self.database.read(sql)
         models = []
         for row in rows:
-            models.append(row)
+            model = Model(row[0], row[1])
+            models.append(model)
         return models
 
     def get_by_id(self, model_id):
         sql = 'SELECT * FROM models WHERE id = ?'
         row = self.database.read(sql, (model_id,))[0]
         if row:
-            return row
+            return Model(row[0], row[1])
         return None
 
     def delete(self, model_id):

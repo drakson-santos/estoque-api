@@ -17,39 +17,43 @@ def create_model():
     model = model_controller.create_model(name)
     return jsonify({"model": model.to_json()})
 
-@bp_models.route("/model/int:id", methods=["GET"])
-def get_model(id):
+@bp_models.route("/models", methods=["GET"])
+def get_all_models():
     data_base = SqlLiteDatabase()
     model_repository = ModelRepositorySqlLite(data_base)
     model_controller = ModelController(model_repository)
 
+    models = model_controller.get_all_models()
+    return jsonify({"models": [model.to_json() for model in models] })
+
+@bp_models.route("/model", methods=["GET"])
+def get_model():
+    data_base = SqlLiteDatabase()
+    model_repository = ModelRepositorySqlLite(data_base)
+    model_controller = ModelController(model_repository)
+
+    id = request.args.get("id")
     model = model_controller.get_model(id)
     return jsonify({"model": model.to_json()})
 
-@bp_models.route("/model/int:id", methods=["PUT"])
-def update_model(id):
+@bp_models.route("/model", methods=["PUT"])
+def update_model():
     data_base = SqlLiteDatabase()
     model_repository = ModelRepositorySqlLite(data_base)
     model_controller = ModelController(model_repository)
 
+    id = request.args.get("id")
     model_name = request.json.get("name")
     model = model_controller.update_model(id, model_name)
     return jsonify({"model": model.to_json()})
 
-@bp_models.route("/model/int:id", methods=["DELETE"])
-def delete_model(id):
+@bp_models.route("/model", methods=["DELETE"])
+def delete_model():
     data_base = SqlLiteDatabase()
     model_repository = ModelRepositorySqlLite(data_base)
     model_controller = ModelController(model_repository)
 
+    id = request.args.get("id")
     model_controller.delete_model(id)
     return jsonify({"message": "Model deleted successfully."})
 
-@bp_models.route("/categories", methods=["GET"])
-def get_all_categories():
-    data_base = SqlLiteDatabase()
-    model_repository = ModelRepositorySqlLite(data_base)
-    model_controller = ModelController(model_repository)
-
-    categories = model_controller.get_all_categories()
-    return jsonify({"categories": [model.to_json() for model in categories] })
