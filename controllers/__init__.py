@@ -1,2 +1,3 @@
 from controllers.product.ProductController import ProductController
 from controllers.model.ModelController import ModelController
+from controllers.category.CategoryController import CategoryController
