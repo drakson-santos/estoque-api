@@ -1,64 +1,35 @@
-# from flask import request, Blueprint
+from flask import jsonify, request, Blueprint
 
-# from controllers.category.CategoryController import CategoryController
-# from repository.inMemoryRepository.inMemory import InMemoryRepository
-# from exceptions.api.NotFoundException import NotFoundException
+from controllers.category.CategoryController import CategoryController
+from repositories.productRepository import ProductRepositorySqlLite
 
-# bp_categories = Blueprint("categories", __name__)
+bp_categories = Blueprint("categories", __name__)
 
-# @bp_categories.route('/categories', methods=["GET"])
-# def get_categories():
-#     category_id =  request.args.get("category_id")
-#     try:
-#         category = CategoryController(InMemoryRepository()).get_category(category_id)
-#     except NotFoundException as error:
-#         return {
-#             "message": error.message,
-#         }, error.http_code
+category_controller = CategoryController(ProductRepositorySqlLite())
 
-#     return {
-#         "categories": category
-#     }
+@bp_categories.route("/category", methods=["POST"])
+def create_category():
+    name = request.json.get("name")
+    category = category_controller.create_category(name)
+    return jsonify({"category": category})
 
-# @bp_categories.route('/categories', methods=["POST"])
-# def save_category():
-#     category_name = request.json["category_name"]
+@bp_categories.route("/category/int:id", methods=["GET"])
+def get_category(id):
+    category = category_controller.get_category(id)
+    return jsonify({"category": category})
 
-#     try:
-#         CategoryController(InMemoryRepository()).save_category(category_name)
-#     except Exception as error:
-#         return{
-#             "message": str(error.message),
-#         }, 500
+@bp_categories.route("/category/int:id", methods=["PUT"])
+def update_category(id):
+    category_name = request.json.get("name")
+    category = category_controller.update_category(id, category_name)
+    return jsonify({"category": category})
 
-#     return {
-#         "id": category_name
-#     }, 201
-# @bp_categories.route('/categories', methods=["PUT"])
-# def update_category():
-#     category_id = request.args.get("category_id")
-#     category_name = request.json.get("category_name")
+@bp_categories.route("/category/int:id", methods=["DELETE"])
+def delete_category(id):
+    category_controller.delete_category(id)
+    return jsonify({"message": "Category deleted successfully."})
 
-#     try:
-#         CategoryController(InMemoryRepository()).update_category(category_id, category_name)
-#     except NotFoundException as error:
-#         return{
-#             "message": error.message,
-#         },error.http_code
-
-#     return {
-#         "id": category_id
-#     },200
-
-# @bp_categories.route('/categories', methods=["DELETE"])
-# def delete_category():
-#     category_id = request.args.get("category_id")
-
-#     try:
-#         CategoryController(InMemoryRepository()).delete_category(category_id)
-#     except NotFoundException as error:
-#         return {
-#             "message": error.message
-#         }, error.http_code
-
-#     return {}, 204
+@bp_categories.route("/categories", methods=["GET"])
+def get_all_categories():
+    categories = category_controller.get_all_categories()
+    return jsonify({"categories": categories})
