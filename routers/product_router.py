@@ -1,108 +1,56 @@
-from flask import request, Blueprint
+from flask import jsonify, request, Blueprint
+
 from databases.sql_lite import SqlLiteDatabase
 from repositories.productRepository import ProductRepositorySqlLite
-from controllers import ProductController
+from controllers.product.ProductController import ProductController
 
+bp_products = Blueprint("products", __name__)
 
-bp_product = Blueprint("product", __name__)
+@bp_products.route("/product", methods=["POST"])
+def create_product():
+    data_base = SqlLiteDatabase()
+    product_repository = ProductRepositorySqlLite(data_base)
+    product_controller = ProductController(product_repository)
+    name = request.json.get("name")
+    model = request.json.get("model")
+    category = request.json.get("category")
+    quantity = request.json.get("quantity")
+    sale_price = request.json.get("sale_price")
+    purchase_price = request.json.get("purchase_price")
+    photo = request.json.get("photo")
+    product = product_controller.create_product(
+        name, model, category, quantity, sale_price, purchase_price, photo)
+    return jsonify({"product": product.to_json()})
 
-# @bp_product.route('/products', methods=["GET"])
-# def get_products():
-#     product_id =  request.args.get("product_id")
+@bp_products.route("/product/int:id", methods=["GET"])
+def get_product(id):
+    data_base = SqlLiteDatabase()
+    product_repository = ProductRepositorySqlLite(data_base)
+    product_controller = ProductController(product_repository)
+    product = product_controller.get_product(id)
+    return jsonify({"product": product.to_json()})
 
-#     try:
-#         products = ProductController(InMemoryRepository()).get_products(product_id)
+@bp_products.route("/product/int:id", methods=["PUT"])
+def update_product(id):
+    data_base = SqlLiteDatabase()
+    product_repository = ProductRepositorySqlLite(data_base)
+    product_controller = ProductController(product_repository)
+    product_name = request.json.get("name")
+    product = product_controller.update_product(id, product_name)
+    return jsonify({"product": product.to_json()})
 
-#         modelController = ModelController(InMemoryRepository())
-#         categoryController = CategoryController(InMemoryRepository())
+@bp_products.route("/product/int:id", methods=["DELETE"])
+def delete_product(id):
+    data_base = SqlLiteDatabase()
+    product_repository = ProductRepositorySqlLite(data_base)
+    product_controller = ProductController(product_repository)
+    product_controller.delete_product(id)
+    return jsonify({"message": "Product deleted successfully."})
 
-#         if isinstance(products, list):
-#             for product in products:
-#                 model_id = product.get("model")
-#                 category_id = product.get("category")
-#                 if isinstance(model_id, dict):
-#                     model_id = model_id.get("id")
-#                     category_id = category_id.get("id")
-
-#                 product["model"] = modelController.get_model(model_id)
-#                 product["category"] = categoryController.get_category(category_id)
-#         else:
-#             products["model"] = modelController.get_model(model_id=product["model"])
-#             products["category"] = categoryController.get_category(category_id=product["category"])
-
-#     except NotFoundException as error:
-#         return {
-#             "message": error.message,
-#         }, error.http_code
-
-#     return {
-#         "products": products
-#     }
-
-
-@bp_product.route('/products', methods=["POST"])
-def save_product():
-    product_name = request.form["product_name"]
-    model = request.form["model"]
-    category = request.form["category"]
-    quantity = request.form["quantity"]
-    sale_price = request.form.get("sale_price")
-    purchase_price = request.form.get("purchase_price")
-    photo = request.files.get("photo")
-
-    try:
-
-        database = SqlLiteDatabase()
-        repository = ProductRepositorySqlLite(database)
-        controller = ProductController(repository)
-        product_id = controller.create_product(product_name)
-
-        return {
-            "id": product_id
-        }, 201
-    except Exception as error:
-        return {
-            "message": str(error),
-        }, 500
-
-# @bp_product.route('/products', methods=["PUT"])
-# def update_product():
-#     product_id =  request.args.get("product_id")
-#     product_name = request.json.get("product_name")
-#     model = request.json.get("model")
-#     category = request.json.get("category")
-#     quantity = request.json.get("quantity")
-#     sale_price = request.json.get("sale_price")
-#     purchase_price = request.json.get("purchase_price")
-
-#     try:
-#         product_id = ProductController(InMemoryRepository()).update_product(
-#             product_id,
-#             product_name,
-#             model,
-#             category,
-#             quantity,
-#             sale_price,
-#             purchase_price
-#         )
-#     except NotFoundException as error:
-#         return {
-#             "message": error.message,
-#         }, error.http_code
-
-#     return {
-#         "id": product_id
-#     }, 200
-
-# @bp_product.route('/products', methods=["DELETE"])
-# def delete_product():
-#     product_id =  request.args.get("product_id")
-
-#     try:
-#         ProductController(InMemoryRepository()).delete_product(product_id)
-#     except NotFoundException as error:
-#         return {
-#             "message": error.message,
-#         }, error.http_code
-
-#     return {}, 204
+@bp_products.route("/products", methods=["GET"])
+def get_all_products():
+    data_base = SqlLiteDatabase()
+    product_repository = ProductRepositorySqlLite(data_base)
+    product_controller = ProductController(product_repository)
+    products = product_controller.get_all_products()
+    return jsonify({"products": [product.to_json() for product in products]})
