@@ -29,8 +29,12 @@ def get_all_products():
     data_base = SqlLiteDatabase()
     product_repository = ProductRepositorySqlLite(data_base)
     product_controller = ProductController(product_repository)
+
     products = product_controller.get_all_products()
-    return jsonify({"products": [product.to_json() for product in products]})
+    if products:
+        products = [product.to_json() for product in products]
+
+    return jsonify({"products": products })
 
 @bp_products.route("/product", methods=["GET"])
 def get_product():
@@ -40,6 +44,7 @@ def get_product():
 
     id = request.args.get("id")
     product = product_controller.get_product(id)
+
     return jsonify({"product": product.to_json()})
 
 @bp_products.route("/product", methods=["PUT"])
